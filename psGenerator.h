@@ -32,14 +32,18 @@ public:
 		centerX = 0;
 		centerY = 0;
 	}
-
+	
 	string toString(double xC, double yC)
 	{
 		string pString = "";
+		pString += "gsave";
+		pString += '\n';
 		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
 		for (auto i : psCode) {
 			pString += i + '\n';
 		}
+		pString += "grestore";
+		pString += '\n';
 		return pString;
 	}
 
@@ -71,12 +75,26 @@ public:
 	
 	Rectangle(double width, double height)
 	{
-
+		psCode.push_back("newpath");
+		psCode.push_back(std::to_string(-(width / 2)) + " " + std::to_string(-(height / 2)) + " moveto");
+		psCode.push_back("0 " + std::to_string(height) + " rlineto");
+		psCode.push_back(std::to_string(width) + " 0 rlineto");
+		psCode.push_back("0 " + std::to_string(-height) + " rlineto");
+		psCode.push_back("closepath stroke");
 	}
 
 	string toString(double xC, double yC)
 	{
-
+		string pString = "";
+		pString += "gsave";
+		pString += '\n';
+		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
+		for (auto i : psCode) {
+			pString += i + '\n';
+		}
+		pString += "grestore";
+		pString += '\n';
+		return pString;
 	}
 
 private:
@@ -94,7 +112,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
@@ -112,7 +130,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
@@ -130,7 +148,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
@@ -170,10 +188,14 @@ public:
 	string toString(double xC, double yC)
 	{
 		string pString = "";
+		pString += "gsave";
+		pString += '\n';
 		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
 		for (auto i : psCode) {
 			pString += i + '\n';
 		}
+		pString += "grestore";
+		pString += '\n';
 		return pString;
 	}
 };
@@ -194,10 +216,14 @@ public:
 	string toString(double xC, double yC)
 	{
 		string pString = "";
+		pString += "gsave";
+		pString += '\n';
 		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
 		for (auto i : psCode) {
 			pString += i + '\n';
 		}
+		pString += "grestore";
+		pString += '\n';
 		return pString;
 	}
 };
@@ -213,7 +239,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
@@ -231,7 +257,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
@@ -249,7 +275,7 @@ public:
 
 	string toString(double xC, double yC)
 	{
-
+		return "";
 	}
 
 private:
