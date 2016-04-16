@@ -4,177 +4,202 @@
 #include <deque>
 #include <fstream>
 #include <initializer_list>
+#include <math.h>
+
+#define PI 3.141592653589793238
 
 using std::string;
-using RotationAngle = int;
 
 class AbstractShape 
 {
 public:
-	virtual string toString(double  xC, double yC)=0;
+	virtual string toString(double xC, double yC)
+	{
+		string pString = "";
+		pString += "gsave";
+		pString += '\n';
+		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
+		for (auto i : psCode) {
+			pString += i + '\n';
+		}
+		pString += "grestore";
+		pString += '\n';
+		return pString;
+	}
 	std::deque<string> psCode;
 	double boundingWidth, boundingHeight; //boundingbox
-	double centerX, centerY; //center of shape
+	virtual ~AbstractShape() {};
 };
 
 class Circle : public AbstractShape
 {
 public:
-
+	Circle() = delete;
+	virtual ~Circle() {};
 	Circle(double radius)
 	{
+		if (radius < 0)
+		{
+			throw;
+		}
 		psCode.push_back(std::to_string(radius));
 		psCode.push_back("/radius 1 index def");
 		psCode.push_back("newpath");
 		psCode.push_back("0 0 radius 0 360 arc stroke");
 		boundingWidth = 2 * radius;
 		boundingHeight = 2 * radius;
-		centerX = 0;
-		centerY = 0;
 	}
-	
-	string toString(double xC, double yC)
-	{
-		string pString = "";
-		pString += "gsave";
-		pString += '\n';
-		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
-		for (auto i : psCode) {
-			pString += i + '\n';
-		}
-		pString += "grestore";
-		pString += '\n';
-		return pString;
-	}
-
-private:
-	Circle() {};
 };
 
 class Polygon : public AbstractShape
 {
 public:
-
+	Polygon() = delete;
+	virtual ~Polygon() {};
 	Polygon(int numSides, double sideLength)
 	{
+		if (numSides < 0 || sideLength < 0)
+		{
+			throw;
+		}
+		std::vector<std::pair<double, double>> points;
+		for (int i = 0; i < numSides;i++) {
+			double x = (sideLength / 2) * (sin(((2 * i + 1)*PI) / numSides) / (sin(PI / numSides)));
+			double y = (-sideLength / 2) * (cos(((2 * i + 1)*PI) / numSides) / (sin(PI / numSides)));
+			points.push_back(std::pair<double, double>(x, y));
+		}
 
+		if (numSides % 2 != 0) //check for odd
+		{
+			boundingWidth = sideLength*(sin((PI*(numSides - 1)) / (2 * numSides)) / sin(PI / numSides));
+			boundingHeight = sideLength*((1 + cos(PI / numSides)) / (2 * sin(PI / numSides)));
+		}
+		if (numSides % 2 == 0 && numSides % 4 != 0) //even but not divisible by 4
+		{
+			boundingWidth = sideLength*(1 / sin(PI / numSides));
+			boundingHeight = sideLength*(cos(PI/numSides)/sin(PI/numSides));
+		}
+		if (numSides % 4 == 0) //divisible by 4
+		{
+			boundingWidth = sideLength*(cos(PI/numSides)/sin(PI/numSides));
+			boundingHeight = sideLength*(cos(PI / numSides) / sin(PI / numSides));
+		}
+
+		psCode.push_back("newpath");
+		psCode.push_back("0 0 moveto");
+		psCode.push_back(std::to_string(points[0].first) + " " + std::to_string(points[0].second) + " moveto");
+		for (int j = 1; j < numSides;++j)
+		{
+			psCode.push_back(std::to_string(points[j].first) + " " + std::to_string(points[j].second) + " lineto");
+		}
+		psCode.push_back("closepath");
+		psCode.push_back("stroke");
 	}
-
-	string toString(double xC, double yC)
-	{
-        return "";
-	}
-
-private:
-	Polygon() {};
 };
 
 class Rectangle : public AbstractShape
 {
 public:
-	
+	Rectangle() = delete;
+	virtual ~Rectangle() {};
 	Rectangle(double width, double height)
 	{
+		if (width < 0 || height < 0)
+		{
+			throw;
+		}
 		psCode.push_back("newpath");
 		psCode.push_back(std::to_string(-(width / 2)) + " " + std::to_string(-(height / 2)) + " moveto");
 		psCode.push_back("0 " + std::to_string(height) + " rlineto");
 		psCode.push_back(std::to_string(width) + " 0 rlineto");
 		psCode.push_back("0 " + std::to_string(-height) + " rlineto");
 		psCode.push_back("closepath stroke");
+		boundingHeight = height;
+		boundingWidth = width;
 	}
-
-	string toString(double xC, double yC)
-	{
-		string pString = "";
-		pString += "gsave";
-		pString += '\n';
-		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
-		for (auto i : psCode) {
-			pString += i + '\n';
-		}
-		pString += "grestore";
-		pString += '\n';
-		return pString;
-	}
-
-private:
-	Rectangle() {};
 };
 
 class Spacer : public AbstractShape
 {
 public:
-
+	Spacer() = delete;
+	virtual ~Spacer() {};
 	Spacer(double width, double height)
 	{
-
+		if (width < 0 || height < 0)
+		{
+			throw;
+		}
+		boundingHeight = height;
+		boundingWidth = width;
 	}
 
+private:
 	string toString(double xC, double yC)
 	{
 		return "";
 	}
-
-private:
-	Spacer() {};
 };
 
 class Square : public AbstractShape
 {
 public:
-
+	Square() = delete;
+	virtual ~Square() {};
 	Square(double sideLength)
 	{
-
+		if (sideLength < 0)
+		{
+			throw;
+		}
+		Polygon tempSquare(4, sideLength);
+		psCode = tempSquare.psCode;
+		boundingHeight = tempSquare.boundingHeight;
+		boundingWidth = tempSquare.boundingWidth;
 	}
-
-	string toString(double xC, double yC)
-	{
-		return "";
-	}
-
-private:
-	Square() {};
 };
 
 class Triangle : public AbstractShape
 {
 public:
-
+	Triangle() = delete;
+	virtual ~Triangle() {};
 	Triangle(double sideLength)
 	{
-
+		if (sideLength < 0)
+		{
+			throw;
+		}
+		Polygon tempTriangle(3, sideLength);
+		psCode = tempTriangle.psCode;
+		boundingHeight = tempTriangle.boundingHeight;
+		boundingWidth = tempTriangle.boundingWidth;
 	}
-
-	string toString(double xC, double yC)
-	{
-		return "";
-	}
-
-private:
-	Triangle() {};
 };
 
 class ShapeDecorator : public AbstractShape 
 {
 public:
-	//ShapeDecorator(AbstractShape *shape) : theShape(shape) {};
 	AbstractShape* theShape;
+	virtual ~ShapeDecorator() {};
 };
 
 class Rotate : public ShapeDecorator
 {
 public:
-	Rotate(AbstractShape *shape, RotationAngle angle) 
+	Rotate() = delete;
+	virtual ~Rotate() {};
+	Rotate(AbstractShape *shape, int angle) 
 	{
+		if (angle % 90 != 0) {
+			throw;
+		}
 		theShape = shape;
 		psCode = theShape->psCode;
 
-		psCode.push_front(std::to_string(angle * 90) + " rotate");
+		psCode.push_front(std::to_string(angle) + " rotate");
 
-		centerX = shape->centerX;
-		centerY = shape->centerY;
-		if (angle % 2 != 0) 
+		if ((angle/90) % 2 != 0) 
 		{
 			boundingWidth = shape->boundingHeight;
 			boundingHeight = shape->boundingWidth;
@@ -185,100 +210,120 @@ public:
 			boundingHeight = shape->boundingHeight;
 		}
 	}
-	string toString(double xC, double yC)
-	{
-		string pString = "";
-		pString += "gsave";
-		pString += '\n';
-		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
-		for (auto i : psCode) {
-			pString += i + '\n';
-		}
-		pString += "grestore";
-		pString += '\n';
-		return pString;
-	}
 };
 
 class Scaled : public ShapeDecorator
 {
 public:
+	Scaled() = delete;
+	virtual ~Scaled() {};
 	Scaled(AbstractShape *shape, double sx, double sy)  {
 		theShape = shape;
 		psCode = theShape->psCode;
 		psCode.push_front(std::to_string(sx) + " " + std::to_string(sy) + " scale");
-		boundingWidth = shape->boundingWidth * sx;
-		boundingHeight = shape->boundingHeight * sy;
-		centerX = shape->centerX;
-		centerY = shape->centerY;
+		boundingWidth = shape->boundingWidth * abs(sx);
+		boundingHeight = shape->boundingHeight * abs(sy);
+		psCode.push_front("gsave");
+		psCode.push_back("grestore");
 	}
 
-	string toString(double xC, double yC)
-	{
-		string pString = "";
-		pString += "gsave";
-		pString += '\n';
-		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
-		for (auto i : psCode) {
-			pString += i + '\n';
-		}
-		pString += "grestore";
-		pString += '\n';
-		return pString;
-	}
 };
 
 class Layered : public ShapeDecorator
 {
 public:
-
-	Layered(std::initializer_list<AbstractShape> x)
+	Layered() = delete;
+	virtual ~Layered() {};
+	Layered(std::initializer_list<AbstractShape *> x)
 	{
-
+		double maxWidth = 0;
+		double maxHeight = 0;
+		for (auto i : x) {
+			if (i->boundingHeight > maxHeight)
+			{
+				maxHeight = i->boundingHeight;
+			}
+			if (i->boundingWidth > maxWidth)
+			{
+				maxWidth = i->boundingWidth;
+			}
+			for (auto j : i->psCode)
+			{
+				psCode.push_back(j);
+			}
+		}
+		boundingHeight = maxHeight;
+		boundingWidth = maxWidth;
 	}
-
-	string toString(double xC, double yC)
-	{
-		return "";
-	}
-
-private:
-	Layered() {};
 };
 
 class Vertical : public ShapeDecorator
 {
 public:
-
-	Vertical(std::initializer_list<AbstractShape> x)
+	Vertical() = delete;
+	virtual ~Vertical() {};
+	Vertical(std::initializer_list<AbstractShape *> x) : shapeVector(x)
 	{
+		double newShapeCenter = 0;
+		double maxHeight = (*shapeVector.begin())->boundingHeight;
+		double maxWidth = (*shapeVector.begin())->boundingWidth;
+		psCode = (*shapeVector.begin())->psCode;
+		for (auto i = shapeVector.begin() + 1; i != shapeVector.end(); ++i) 
+		{
 
+			if ((*i)->boundingWidth > maxWidth)
+			{
+				maxWidth = (*i)->boundingWidth;
+			}
+			maxHeight += (*i)->boundingHeight;
+			newShapeCenter += (*(i - 1))->boundingHeight / 2 + (*i)->boundingHeight / 2;
+			psCode.push_back("gsave");
+			psCode.push_back("0 " + std::to_string(newShapeCenter) + " translate");
+			for (auto j : (*i)->psCode) {
+				psCode.push_back(j);
+			}
+			psCode.push_back("grestore");
+
+		}
+		boundingHeight = maxHeight;
+		boundingWidth = maxWidth;
 	}
-
-	string toString(double xC, double yC)
-	{
-		return "";
-	}
-
 private:
-	Vertical() {};
-
+	std::vector <AbstractShape *> shapeVector;
 };
 
 class Horizontal : public ShapeDecorator
 {
 public:
+	Horizontal() = delete;
+	virtual ~Horizontal() {};
+	Horizontal(std::initializer_list<AbstractShape *> x) : shapeVector(x) {
+		double newShapeCenter = 0;
+		double maxHeight = (*shapeVector.begin())->boundingHeight;
+		double maxWidth = (*shapeVector.begin())->boundingWidth;
+		psCode = (*shapeVector.begin())->psCode;
+		for (auto i = shapeVector.begin() + 1; i != shapeVector.end(); ++i)
+		{
 
-	Horizontal(std::initializer_list<AbstractShape> x) {
+			if ((*i)->boundingHeight > maxHeight)
+			{
+				maxHeight = (*i)->boundingHeight;
+			}
+			maxWidth += (*i)->boundingWidth;
 
+			newShapeCenter += (*(i - 1))->boundingWidth / 2 + (*i)->boundingWidth / 2;
+			psCode.push_back("gsave");
+			psCode.push_back(std::to_string(newShapeCenter) + " 0 translate");
+			for (auto j : (*i)->psCode) {
+				psCode.push_back(j);
+			}
+			psCode.push_back("grestore");
+
+		}
+		boundingHeight = maxHeight;
+		boundingWidth = maxWidth;
 	}
-
-	string toString(double xC, double yC)
-	{
-		return "";
-	}
-
 private:
-	Horizontal() {};
+	std::vector<AbstractShape *> shapeVector;
 
 };
