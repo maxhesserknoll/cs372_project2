@@ -177,6 +177,92 @@ public:
 	}
 };
 
+class Trapezoid : public AbstractShape
+{
+public:
+    Trapezoid() = delete;
+    virtual ~Trapezoid() {};
+    Trapezoid(double topLength, double bottomLength, double height)
+    {
+        if (topLength < 0 || bottomLength < 0 || height < 0)
+        {
+            throw;
+        }
+        
+        boundingHeight = height;
+        (topLength > bottomLength)? boundingWidth = topLength : boundingWidth = bottomLength ;
+        
+        psCode.push_back(std::to_string(topLength) + " " + std::to_string(bottomLength) + " " + std::to_string(height));
+        psCode.push_back("/topside 1 index def");
+        psCode.push_back("/bottomside 2 index def");
+        psCode.push_back("/hieght 3 index def");
+        psCode.push_back("newpath");
+        psCode.push_back("0 0 moveto");
+        psCode.push_back("bottomside 2  div");
+        psCode.push_back("hieght -2 div");
+        psCode.push_back("moveto");
+        psCode.push_back("bottomside -2 div");
+        psCode.push_back("hieght -2 div");
+        psCode.push_back("lineto");
+        psCode.push_back("topside -2 div");
+        psCode.push_back("hieght 2 div");
+        psCode.push_back("lineto");
+        psCode.push_back("topside 2 div");
+        psCode.push_back("hieght 2 div");
+        psCode.push_back("lineto");
+        psCode.push_back("closepath");
+        psCode.push_back("stroke");
+    }
+};
+
+
+class FiftyShades : public AbstractShape
+{
+public:
+    FiftyShades() = delete;
+    virtual ~FiftyShades() {};
+    FiftyShades(double sideLength)
+    {
+        if (sideLength < 0)
+        {
+            throw;
+        }
+        
+        boundingHeight = sideLength;
+        boundingWidth = sideLength;
+        
+        psCode.push_back(std::to_string(sideLength));
+        psCode.push_back("/size 1 index def");
+        psCode.push_back("/50size size 50 div def");
+        psCode.push_back("size -2 div size -2 div translate");
+        psCode.push_back("newpath");
+        psCode.push_back("0 0 moveto");
+        psCode.push_back("50 -1 0{");
+        psCode.push_back("0 0 moveto");
+        psCode.push_back("dup");
+        psCode.push_back("dup");
+        psCode.push_back(".02 mul");
+        psCode.push_back("setgray");
+        psCode.push_back("dup");
+        psCode.push_back("50size mul");
+        psCode.push_back("0 lineto");
+        psCode.push_back("50size mul");
+        psCode.push_back("size lineto");
+        psCode.push_back("0 size lineto");
+        psCode.push_back("closepath");
+        psCode.push_back("fill");
+        psCode.push_back("stroke");
+        psCode.push_back("}for");
+        psCode.push_back("0 0 moveto");
+        psCode.push_back("0 size lineto");
+        psCode.push_back("size size lineto");
+        psCode.push_back("size 0 lineto");
+        psCode.push_back("closepath");
+        psCode.push_back("stroke");
+        
+    }
+};
+
 class ShapeDecorator : public AbstractShape 
 {
 public:
@@ -191,7 +277,8 @@ public:
 	virtual ~Rotate() {};
 	Rotate(AbstractShape *shape, int angle) 
 	{
-		if (angle % 90 != 0) {
+		if (angle % 90 != 0)
+        {
 			throw;
 		}
 		theShape = shape;
@@ -221,8 +308,8 @@ public:
 		theShape = shape;
 		psCode = theShape->psCode;
 		psCode.push_front(std::to_string(sx) + " " + std::to_string(sy) + " scale");
-		boundingWidth = shape->boundingWidth * abs(sx);
-		boundingHeight = shape->boundingHeight * abs(sy);
+		boundingWidth = shape->boundingWidth * fabs(sx);
+		boundingHeight = shape->boundingHeight * fabs(sy);
 		psCode.push_front("gsave");
 		psCode.push_back("grestore");
 	}
