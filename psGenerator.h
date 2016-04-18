@@ -13,22 +13,23 @@ using std::string;
 class AbstractShape 
 {
 public:
+    std::deque<string> psCode;
+    double boundingWidth, boundingHeight; //boundingbox
+    virtual ~AbstractShape() {};
+    
 	virtual string toString(double xC, double yC)
 	{
-		string pString = "";
-		pString += "gsave";
-		pString += '\n';
-		pString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
+		string psString = "";
+		psString += "gsave";
+		psString += '\n';
+		psString += std::to_string(xC) + " " + std::to_string(yC) + " translate" + '\n';
 		for (auto i : psCode) {
-			pString += i + '\n';
+			psString += i + '\n';
 		}
-		pString += "grestore";
-		pString += '\n';
-		return pString;
+		psString += "grestore";
+		psString += '\n';
+		return psString;
 	}
-	std::deque<string> psCode;
-	double boundingWidth, boundingHeight; //boundingbox
-	virtual ~AbstractShape() {};
 };
 
 class Circle : public AbstractShape
@@ -58,7 +59,7 @@ public:
 	virtual ~Polygon() {};
 	Polygon(int numSides, double sideLength)
 	{
-		if (numSides < 0 || sideLength < 0)
+		if (numSides < 2 || sideLength < 0)
 		{
 			throw;
 		}
@@ -134,7 +135,6 @@ public:
 		boundingWidth = width;
 	}
 
-private:
 	string toString(double xC, double yC)
 	{
 		return "";
