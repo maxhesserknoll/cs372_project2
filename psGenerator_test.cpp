@@ -1,8 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "psGenerator.h"
-#include <iostream>
-#include <vector>
 
 
 TEST_CASE("Test Cicle") {
