@@ -277,7 +277,7 @@ public:
 	virtual ~Rotate() {};
 	Rotate(AbstractShape *shape, int angle) 
 	{
-		if (angle % 90 != 0)
+		if ((angle % 90) != 0)
         {
 			throw;
 		}
