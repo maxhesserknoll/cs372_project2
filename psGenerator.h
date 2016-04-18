@@ -15,7 +15,7 @@ class AbstractShape
 public:
     std::deque<string> psCode;
     double boundingWidth, boundingHeight; //boundingbox
-    virtual ~AbstractShape() {};
+    virtual ~AbstractShape() = default;
     
 	virtual string toString(double xC, double yC)
 	{
