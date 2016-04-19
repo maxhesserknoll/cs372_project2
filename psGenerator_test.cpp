@@ -242,10 +242,133 @@ TEST_CASE("Test Rotate") {
 }
 
 TEST_CASE("Test Layered") {
+    Circle testCirc(50);
+    Polygon testPolyOdd(3,15);
+    Polygon testPolyEvenNotDiv4(6,30.5);
+    Layered testLayered = {&testCirc, &testPolyOdd, &testPolyEvenNotDiv4};
+    
+    REQUIRE(testLayered.boundingWidth == 100);
+    REQUIRE(testLayered.boundingHeight == 100);
+    
+    REQUIRE(testLayered.toString(360, 360) ==
+            "gsave\n"
+            "360.000000 360.000000 translate\n"
+            "50.000000\n"
+            "/radius 1 index def\n"
+            "newpath\n"
+            "0 0 radius 0 360 arc stroke\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "7.500000 -4.330127 moveto\n"
+            "0.000000 8.660254 lineto\n"
+            "-7.500000 -4.330127 lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "15.250000 -26.413775 moveto\n"
+            "30.500000 -0.000000 lineto\n"
+            "15.250000 26.413775 lineto\n"
+            "-15.250000 26.413775 lineto\n"
+            "-30.500000 0.000000 lineto\n"
+            "-15.250000 -26.413775 lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "grestore\n");
 }
 
 TEST_CASE("Test Vertical") {
+    Polygon testPolyEvenDiv4(8,55.5);
+    Spacer testSpacer(100,144.4);
+    Rectangle testRect(100, 144.4);
+    Vertical testVertical = {&testPolyEvenDiv4, &testSpacer, &testRect};
+    
+    REQUIRE(testVertical.boundingWidth == 133.98885271170676);
+    REQUIRE(testVertical.boundingHeight == 422.7888527117068);
+    
+    REQUIRE(testVertical.toString(360, 360) ==
+            "gsave\n"
+            "360.000000 360.000000 translate\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "27.750000 -66.994426 moveto\n"
+            "66.994426 -27.750000 lineto\n"
+            "66.994426 27.750000 lineto\n"
+            "27.750000 66.994426 lineto\n"
+            "-27.750000 66.994426 lineto\n"
+            "-66.994426 27.750000 lineto\n"
+            "-66.994426 -27.750000 lineto\n"
+            "-27.750000 -66.994426 lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "gsave\n"
+            "0 139.194426 translate\n"
+            "grestore\n"
+            "gsave\n"
+            "0 283.594426 translate\n"
+            "newpath\n"
+            "-50.000000 -72.200000 moveto\n"
+            "0 144.400000 rlineto\n"
+            "100.000000 0 rlineto\n"
+            "0 -144.400000 rlineto\n"
+            "closepath stroke\n"
+            "grestore\n"
+            "grestore\n");
+
 }
 
 TEST_CASE("Test Horizontal") {
+    Square testSquare(56.7);
+    Triangle testTriangle(300.123);
+    Trapezoid testTrap(55, 44, 21.2);
+    Horizontal testHorizontal = {&testSquare, &testTriangle, &testTrap};
+    
+    REQUIRE(testHorizontal.boundingWidth == 411.82299999999998);
+    REQUIRE(testHorizontal.boundingHeight == 259.91414225999711);
+    
+    REQUIRE(testHorizontal.toString(360, 360) ==
+            "gsave\n"
+            "360.000000 360.000000 translate\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "28.350000 -28.350000 moveto\n"
+            "28.350000 28.350000 lineto\n"
+            "-28.350000 28.350000 lineto\n"
+            "-28.350000 -28.350000 lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "gsave\n"
+            "178.411500 0 translate\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "150.061500 -86.638047 moveto\n"
+            "0.000000 173.276095 lineto\n"
+            "-150.061500 -86.638047 lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "grestore\n"
+            "gsave\n"
+            "355.973000 0 translate\n"
+            "55.000000 44.000000 21.200000\n"
+            "/topside 1 index def\n"
+            "/bottomside 2 index def\n"
+            "/hieght 3 index def\n"
+            "newpath\n"
+            "0 0 moveto\n"
+            "bottomside 2  div\n"
+            "hieght -2 div\n"
+            "moveto\n"
+            "bottomside -2 div\n"
+            "hieght -2 div\n"
+            "lineto\n"
+            "topside -2 div\n"
+            "hieght 2 div\n"
+            "lineto\n"
+            "topside 2 div\n"
+            "hieght 2 div\n"
+            "lineto\n"
+            "closepath\n"
+            "stroke\n"
+            "grestore\n"
+            "grestore\n");
 }
