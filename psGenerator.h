@@ -1,22 +1,31 @@
-#include <iostream>
 #include <vector>
 #include <string>
-#include <deque>
-#include <fstream>
-#include <initializer_list>
-#include <math.h>
-
+#include <deque> //used to store the pscode
+#include <initializer_list> //to pass multiple shapes to a function
+#include <math.h> //for sin and cos functions
 #define PI 3.141592653589793238
 
 using std::string;
 
+// *********************************************************************
+// class AbstractShape - Class Deceleration
+// *********************************************************************
+
+// class AbstractShape
+// AbstractShape Class which all shape and decorators will be based on
+// via the decorator design pattern.
 class AbstractShape 
 {
 public:
-    std::deque<string> psCode;
-    double boundingWidth, boundingHeight; //boundingbox
-    virtual ~AbstractShape() = default;
+    //storage for postscript code
+	std::deque<string> psCode;
     
+	double boundingWidth, boundingHeight; //boundingbox
+    
+	//virtual destructor
+	virtual ~AbstractShape() = default;
+    
+	//tostring function that will output the deque and put it into one string.
 	virtual string toString(double xC, double yC)
 	{
 		string psString = "";
@@ -32,11 +41,24 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Circle - Class Deceleration
+// *********************************************************************
+
+// class Circle, inherits from AbstractShape
+// Class that takes a parameter of a double and generates a circle with the associated value.
+// default constructor is deleted
+//throws if radius is less than 0
 class Circle : public AbstractShape
 {
 public:
+
+	//default ctor
 	Circle() = delete;
+	//virtual destructor
 	virtual ~Circle() {};
+	
+	//ctor with one parameter
 	Circle(double radius)
 	{
 		if (radius < 0)
@@ -52,17 +74,31 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Polygon - Class Deceleration
+// *********************************************************************
+
+// class Polygon, inherits from AbstractShape
+// Class that generates a polygon with the associated numsides and sideLength
+//throws if numSides <2 or sideLength is less than 0
 class Polygon : public AbstractShape
 {
 public:
+
+	//default ctor
 	Polygon() = delete;
+	
+	//virtual dctor
 	virtual ~Polygon() {};
+	
+	//ctor of two parameters
 	Polygon(int numSides, double sideLength)
 	{
 		if (numSides < 2 || sideLength < 0)
 		{
 			throw;
 		}
+		//storage and calculation of the associated points
 		std::vector<std::pair<double, double>> points;
 		for (int i = 0; i < numSides;i++) {
 			double x = (sideLength / 2) * (sin(((2 * i + 1)*PI) / numSides) / (sin(PI / numSides)));
@@ -70,6 +106,7 @@ public:
 			points.push_back(std::pair<double, double>(x, y));
 		}
 
+		//bounding box calculation
 		if (numSides % 2 != 0) //check for odd
 		{
 			boundingWidth = sideLength*(sin((PI*(numSides - 1)) / (2 * numSides)) / sin(PI / numSides));
@@ -86,6 +123,7 @@ public:
 			boundingHeight = sideLength*(cos(PI / numSides) / sin(PI / numSides));
 		}
 
+		//postscript generation
 		psCode.push_back("newpath");
 		psCode.push_back("0 0 moveto");
 		psCode.push_back(std::to_string(points[0].first) + " " + std::to_string(points[0].second) + " moveto");
@@ -98,11 +136,24 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Rectangle - Class Deceleration
+// *********************************************************************
+
+// class Rectangle, inherits from AbstractShape
+// Class that constructs a rectangle with the associated width and height
+//throws if width or height is below 0
 class Rectangle : public AbstractShape
 {
 public:
+
+	//default ctor
 	Rectangle() = delete;
+	
+	//virtual dctor
 	virtual ~Rectangle() {};
+	
+	//ctor with two parameters
 	Rectangle(double width, double height)
 	{
 		if (width < 0 || height < 0)
@@ -120,11 +171,25 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Spacer - Class Deceleration
+// *********************************************************************
+
+// class Spacer, inherits from AbstractShape
+// Class that generates a bounding box based on given width and height
+//does not draw anything
+
 class Spacer : public AbstractShape
 {
 public:
+
+	//default ctor
 	Spacer() = delete;
+	
+	//virtual dctor
 	virtual ~Spacer() {};
+	
+	//ctor of two parameters
 	Spacer(double width, double height)
 	{
 		if (width < 0 || height < 0)
@@ -135,17 +200,32 @@ public:
 		boundingWidth = width;
 	}
 
+	//overloaded tostring
 	string toString(double xC, double yC)
 	{
 		return "";
 	}
 };
 
+// *********************************************************************
+// class Square - Class Deceleration
+// *********************************************************************
+
+// class Square, inherits from AbstractShape
+// Class constructs a square by taking parameter sideLength and passing it
+// to polygon.
+//throws if sideLength is less than 0
 class Square : public AbstractShape
 {
 public:
+
+	//default ctor
 	Square() = delete;
+
+	//virtual dctor
 	virtual ~Square() {};
+	
+	//ctor with one parameter
 	Square(double sideLength)
 	{
 		if (sideLength < 0)
@@ -159,11 +239,25 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Triangle - Class Deceleration
+// *********************************************************************
+
+// class Triangle, inherits from AbstractShape
+// Class that constructs an equilateral triangle in postscript based on sideLength.
+// Passes sidelength to Polygon.
+// throws when sideLength is less than 0
 class Triangle : public AbstractShape
 {
 public:
+
+	//default ctor
 	Triangle() = delete;
+	
+	//virtual dctor
 	virtual ~Triangle() {};
+	
+	//ctor with one parameter
 	Triangle(double sideLength)
 	{
 		if (sideLength < 0)
@@ -177,12 +271,26 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Trapezoid - Class Deceleration
+// *********************************************************************
+
+// class Trapezoid, inherits from AbstractShape
+// Class that takes the topLength, bottomLength, and height and generates
+// a trapezoid based on those parameters.
+//throws when toplength, bottomlength, and height are less than 0
 class Trapezoid : public AbstractShape
 {
 public:
+
+	//default ctor
     Trapezoid() = delete;
+	
+	//virtual dctor
     virtual ~Trapezoid() {};
-    Trapezoid(double topLength, double bottomLength, double height)
+    
+	//ctor with three parameters
+	Trapezoid(double topLength, double bottomLength, double height)
     {
         if (topLength < 0 || bottomLength < 0 || height < 0)
         {
@@ -216,6 +324,14 @@ public:
 };
 
 
+// *********************************************************************
+// class FiftyShades - Class Deceleration
+// *********************************************************************
+
+// class FiftyShades, inherits from AbstractShape
+// Class that generates a square with 50 shades of gray
+// takes sideLength parameter and generates accordingly.
+// throws when sideLength is less than 0
 class FiftyShades : public AbstractShape
 {
 public:
@@ -263,6 +379,12 @@ public:
     }
 };
 
+// *********************************************************************
+// class ShapeDecorator - Class Deceleration
+// *********************************************************************
+
+// class ShapeDecorator, inherits from AbstractShape
+// Base class for decorator
 class ShapeDecorator : public AbstractShape 
 {
 public:
@@ -270,11 +392,24 @@ public:
 	virtual ~ShapeDecorator() {};
 };
 
+// *********************************************************************
+// class Rotate - Class Deceleration
+// *********************************************************************
+
+// class Rotate, inherits from ShapeDecorator
+// Class that constructs a new shape of the given shape but rotated by the given angle.
+// throws if angle is not divisible by 90 degrees.
 class Rotate : public ShapeDecorator
 {
 public:
+
+	//default ctor
 	Rotate() = delete;
+	
+	//virtual dctor
 	virtual ~Rotate() {};
+	
+	//ctor of two parameters
 	Rotate(AbstractShape *shape, int angle) 
 	{
 		if ((angle % 90) != 0)
@@ -299,11 +434,23 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Scaled - Class Deceleration
+// *********************************************************************
+
+// class Scaled, inherits from ShapeDecorator
+// Class takes shape and constructs a new shape with the associated scaled values
 class Scaled : public ShapeDecorator
 {
 public:
+	
+	//default ctor
 	Scaled() = delete;
+	
+	//virtual dctor
 	virtual ~Scaled() {};
+	
+	//ctor that takes three parameters
 	Scaled(AbstractShape *shape, double sx, double sy)  {
 		theShape = shape;
 		psCode = theShape->psCode;
@@ -316,15 +463,31 @@ public:
 
 };
 
+// *********************************************************************
+// class Layered - Class Deceleration
+// *********************************************************************
+
+// class Layered, inherits from ShapeDecorator
+// Class that takes a variable amount of shapes and layers them on top of each other
+// and makes that a new shape out of that.
 class Layered : public ShapeDecorator
 {
 public:
+	
+	//default ctor
 	Layered() = delete;
+	
+	//virtual dctor
 	virtual ~Layered() {};
+	
+	//ctor that can take multiple parameters via an initalizer list
 	Layered(std::initializer_list<AbstractShape *> x)
 	{
 		double maxWidth = 0;
 		double maxHeight = 0;
+		
+		//for loop that places shapes on top of each other
+		//changes the boundingHeight and boundingWidth to largest value of the shapes given
 		for (auto i : x) {
 			if (i->boundingHeight > maxHeight)
 			{
@@ -344,17 +507,33 @@ public:
 	}
 };
 
+// *********************************************************************
+// class Vertical - Class Deceleration
+// *********************************************************************
+
+// class Vertical, inherits from ShapeDecorator
+// Class that constructs a new shape by placing the given shapes vertical from each other.
 class Vertical : public ShapeDecorator
 {
 public:
+
+	//default ctor
 	Vertical() = delete;
+	
+	//virtual dctor
 	virtual ~Vertical() {};
+	
+	//ctor that can take multiple parameters via an initalizer list
 	Vertical(std::initializer_list<AbstractShape *> x) : shapeVector(x)
 	{
+		//takes first shape and set its initial boundingBox and boundingWidth
 		double newShapeCenter = 0;
 		double maxHeight = (*shapeVector.begin())->boundingHeight;
 		double maxWidth = (*shapeVector.begin())->boundingWidth;
 		psCode = (*shapeVector.begin())->psCode;
+		
+		//stacks shape based on the boundingheight, and adds to total boundingHeight
+		//also checks for max boundingWidth.
 		for (auto i = shapeVector.begin() + 1; i != shapeVector.end(); ++i) 
 		{
 
@@ -376,19 +555,38 @@ public:
 		boundingWidth = maxWidth;
 	}
 private:
+	//used to convert initalizer list into a vector
 	std::vector <AbstractShape *> shapeVector;
 };
 
+// *********************************************************************
+// class Horizontal - Class Deceleration
+// *********************************************************************
+
+// class Horizontal, inherits from ShapeDecorator
+// Class that generates a new shape by placing the shapes passed to it
+// along the horizontal or x axis. 
 class Horizontal : public ShapeDecorator
 {
 public:
+
+	//default ctor
 	Horizontal() = delete;
+	
+	//virtual dctor
 	virtual ~Horizontal() {};
+	
+	//ctor that takes multiple parameters via an initalizer list.
 	Horizontal(std::initializer_list<AbstractShape *> x) : shapeVector(x) {
+		
+		//the first shape is placed
 		double newShapeCenter = 0;
 		double maxHeight = (*shapeVector.begin())->boundingHeight;
 		double maxWidth = (*shapeVector.begin())->boundingWidth;
 		psCode = (*shapeVector.begin())->psCode;
+		
+		//every other shape is placed horizontal to the first shape by its associated boundingWidth
+		//the boundingWidth is then added to the total and boundingHeight is the largest boundingHeight of the shapes given.
 		for (auto i = shapeVector.begin() + 1; i != shapeVector.end(); ++i)
 		{
 
@@ -411,6 +609,7 @@ public:
 		boundingWidth = maxWidth;
 	}
 private:
+	//used to convert initalizer list into a vector
 	std::vector<AbstractShape *> shapeVector;
 
 };
