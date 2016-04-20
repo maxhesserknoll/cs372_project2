@@ -1,7 +1,15 @@
+// psGenerator.h
+// CS 372
+// Project 2
+// Group 1
+// 20 April 2016
+
+// Testing code for psGenerator.h
+
+
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "psGenerator.h"
-
 
 TEST_CASE("Test Cicle") {
     Circle testCirc(50);

@@ -1,3 +1,17 @@
+// psGenerator.h
+// CS 372
+// Project 2
+// Group 1
+// 20 April 2016
+
+// There is no associated source file.
+
+// PostScript Generator Library:
+// C++ library that takes commands to draw certain shapes
+// and outputs code in the PostScript programming language.
+// Uses Decorator design pattern.
+
+
 #include <vector>
 #include <string>
 #include <deque> //used to store the pscode
