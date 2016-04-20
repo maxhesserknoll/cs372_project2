@@ -25,21 +25,28 @@ int main()
 	myfile << "%PS file generated using a postscript generator \n";
 	myfile << "%Created by Jesse Zhang, Max Hesser-Knoll, James Lang, Scott Corcoran \n";
 
+    
     // Example of basic shapes with decorators
     Circle testCirc(50);
     Scaled testEllipse(&testCirc, 3, 1);
     Rotate testRotateEllipse(&testEllipse, 90);
+    
+    // Layered object
     Layered testLayered = {&testCirc, &testEllipse, &testRotateEllipse};
     
     myfile << testLayered.toString(150, 150);
     
     
+    
     Scaled scaledLayered(&testLayered, 0.3, 0.1);
     Rotate rotateScaledLayered(&scaledLayered,90);
     Spacer testSpacer(30,20);
+    
+    // Vertical object
     Vertical testVertical = {&scaledLayered, &rotateScaledLayered, &testSpacer, &rotateScaledLayered, &scaledLayered};
     
     myfile << testVertical.toString(432, 72);
+    
     
         
     // Example of custom shapes with decorators
@@ -49,14 +56,19 @@ int main()
     Rotate testTrapezoidRotate90(&testTrapezoid, 90);
     Rotate testTrapezoidRotateNeg90(&testTrapezoid, -90);
     
+    // Horizontal object
     Horizontal testHorizontal = {&test50shades2, &testTrapezoidRotateNeg90, &testTrapezoidRotate90, &testTrapezoidRotateNeg90, &test50shades};
     
     myfile << testHorizontal.toString(72, 500);
 
+    
+    
 	myfile << "\n";
 	myfile << " showpage";
 
 
+    
+    
     // Make a robot using library
 	myfile << "%PS file generated using a postscript generator \n";
 	myfile << "%Created by Jesse Zhang, Max Hesser-Knoll, James Lang, Scott Corcoran \n";
