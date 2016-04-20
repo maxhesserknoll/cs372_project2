@@ -22,7 +22,7 @@
 using std::string;
 
 // *********************************************************************
-// class AbstractShape - Class Deceleration
+// class AbstractShape - Class Declaration
 // *********************************************************************
 
 // class AbstractShape
@@ -56,7 +56,7 @@ public:
 };
 
 // *********************************************************************
-// class Circle - Class Deceleration
+// class Circle - Class Declaration
 // *********************************************************************
 
 // class Circle, inherits from AbstractShape
@@ -89,7 +89,7 @@ public:
 };
 
 // *********************************************************************
-// class Polygon - Class Deceleration
+// class Polygon - Class Declaration
 // *********************************************************************
 
 // class Polygon, inherits from AbstractShape
@@ -151,7 +151,7 @@ public:
 };
 
 // *********************************************************************
-// class Rectangle - Class Deceleration
+// class Rectangle - Class Declaration
 // *********************************************************************
 
 // class Rectangle, inherits from AbstractShape
@@ -186,7 +186,7 @@ public:
 };
 
 // *********************************************************************
-// class Spacer - Class Deceleration
+// class Spacer - Class Declaration
 // *********************************************************************
 
 // class Spacer, inherits from AbstractShape
@@ -222,7 +222,7 @@ public:
 };
 
 // *********************************************************************
-// class Square - Class Deceleration
+// class Square - Class Declaration
 // *********************************************************************
 
 // class Square, inherits from AbstractShape
@@ -254,7 +254,7 @@ public:
 };
 
 // *********************************************************************
-// class Triangle - Class Deceleration
+// class Triangle - Class Declaration
 // *********************************************************************
 
 // class Triangle, inherits from AbstractShape
@@ -286,7 +286,7 @@ public:
 };
 
 // *********************************************************************
-// class Trapezoid - Class Deceleration
+// class Trapezoid - Class Declaration
 // *********************************************************************
 
 // class Trapezoid, inherits from AbstractShape
@@ -339,7 +339,7 @@ public:
 
 
 // *********************************************************************
-// class FiftyShades - Class Deceleration
+// class FiftyShades - Class Declaration
 // *********************************************************************
 
 // class FiftyShades, inherits from AbstractShape
@@ -396,7 +396,7 @@ public:
 };
 
 // *********************************************************************
-// class ShapeDecorator - Class Deceleration
+// class ShapeDecorator - Class Declaration
 // *********************************************************************
 
 // class ShapeDecorator, inherits from AbstractShape
@@ -409,7 +409,7 @@ public:
 };
 
 // *********************************************************************
-// class Rotate - Class Deceleration
+// class Rotate - Class Declaration
 // *********************************************************************
 
 // class Rotate, inherits from ShapeDecorator
@@ -453,7 +453,7 @@ public:
 };
 
 // *********************************************************************
-// class Scaled - Class Deceleration
+// class Scaled - Class Declaration
 // *********************************************************************
 
 // class Scaled, inherits from ShapeDecorator
@@ -482,7 +482,7 @@ public:
 };
 
 // *********************************************************************
-// class Layered - Class Deceleration
+// class Layered - Class Declaration
 // *********************************************************************
 
 // class Layered, inherits from ShapeDecorator
@@ -526,7 +526,7 @@ public:
 };
 
 // *********************************************************************
-// class Vertical - Class Deceleration
+// class Vertical - Class Declaration
 // *********************************************************************
 
 // class Vertical, inherits from ShapeDecorator
@@ -578,7 +578,7 @@ private:
 };
 
 // *********************************************************************
-// class Horizontal - Class Deceleration
+// class Horizontal - Class Declaration
 // *********************************************************************
 
 // class Horizontal, inherits from ShapeDecorator
