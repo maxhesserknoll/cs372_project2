@@ -314,7 +314,7 @@ public:
         boundingHeight = height;
         (topLength > bottomLength)? boundingWidth = topLength : boundingWidth = bottomLength ;
         
-        psCode.push_back(std::to_string(topLength) + " " + std::to_string(bottomLength) + " " + std::to_string(height));
+        psCode.push_back(std::to_string(height) + " " + std::to_string(bottomLength) + " " + std::to_string(topLength));
         psCode.push_back("/topside 1 index def");
         psCode.push_back("/bottomside 2 index def");
         psCode.push_back("/hieght 3 index def");
@@ -361,6 +361,7 @@ public:
         boundingHeight = sideLength;
         boundingWidth = sideLength;
         
+        psCode.push_back("gsave");
         psCode.push_back(std::to_string(sideLength));
         psCode.push_back("/size 1 index def");
         psCode.push_back("/50size size 50 div def");
@@ -389,6 +390,7 @@ public:
         psCode.push_back("size 0 lineto");
         psCode.push_back("closepath");
         psCode.push_back("stroke");
+        psCode.push_back("grestore");
         
     }
 };
@@ -445,6 +447,8 @@ public:
 			boundingWidth = shape->boundingWidth;
 			boundingHeight = shape->boundingHeight;
 		}
+        psCode.push_front("gsave");
+        psCode.push_back("grestore");
 	}
 };
 

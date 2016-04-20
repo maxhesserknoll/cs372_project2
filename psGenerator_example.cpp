@@ -10,33 +10,40 @@ using std::ofstream;
 
 int main()
 {
-	//scaled
-	//decorators
+    
 	ofstream myfile;
-	myfile.open("printerOuputText.ps");
-	myfile << "%! \n"; 
+	myfile.open("psExampleOuput.ps");
+	myfile << "%! \n";
 	myfile << "%PS file generated using a postscript generator \n";
 	myfile << "%Created by Jesse Zhang, Max Hesser-Knoll, James Lang, Scott Corcoran \n";
 
-
-
-	Circle testCirc(50);
-	myfile << testCirc.toString(50, 50) << endl;
-	Square testSquare(72);
-	
-	Rectangle testRectangle(72,144);
-	testRectangle.boundingWidth = 100;
-	testRectangle.boundingHeight = 200;
-	myfile << testRectangle.toString(144,144) << endl;
-	
-	FiftyShades test50shades(288);
-	myfile << test50shades.toString(144,288) << endl;
-
-
-	Trapezoid testTrapazoid(72, 144, 288);
-	myfile << testTrapazoid.toString(288,144) << endl;
-
-
+    // Example of basic shapes with decorators
+    Circle testCirc(50);
+    Scaled testEllipse(&testCirc, 3, 1);
+    Rotate testRotateEllipse(&testEllipse, 90);
+    Layered testLayered = {&testCirc, &testEllipse, &testRotateEllipse};
+    
+    myfile << testLayered.toString(150, 150);
+    
+    
+    Scaled scaledLayered(&testLayered, 0.3, 0.1);
+    Rotate rotateScaledLayered(&scaledLayered,90);
+    Spacer testSpacer(30,20);
+    Vertical testVertical = {&scaledLayered, &rotateScaledLayered, &testSpacer, &rotateScaledLayered, &scaledLayered};
+    
+    myfile << testVertical.toString(432, 72);
+    
+        
+    // Example of custom shapes with decorators
+    FiftyShades test50shades(72);
+    FiftyShades test50shades2(155);
+    Trapezoid testTrapezoid(72, 144, 100);
+    Rotate testTrapezoidRotate90(&testTrapezoid, 90);
+    Rotate testTrapezoidRotateNeg90(&testTrapezoid, -90);
+    
+    Horizontal testHorizontal = {&test50shades2, &testTrapezoidRotateNeg90, &testTrapezoidRotate90, &testTrapezoidRotateNeg90, &test50shades};
+    
+    myfile << testHorizontal.toString(72, 500);
 
 	myfile << "\n";
 	myfile << " showpage";
