@@ -1,4 +1,4 @@
-// psGenerator.h
+// psGenerator_test.cpp
 // CS 372
 // Project 2
 // Group 1

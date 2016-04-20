@@ -1,8 +1,16 @@
+// psGenerator_example.cpp
+// CS 372
+// Project 2
+// Group 1
+// 20 April 2016
+
+// Example of using psGenerator.h library.
+
 
 #include "psGenerator.h"
 #include<iostream>
 #include <fstream>
-//test basic shapes
+
 using std::cin;
 using std::cout;
 using std::endl;
@@ -49,6 +57,7 @@ int main()
 	myfile << " showpage";
 
 
+    // Make a robot using library
 	myfile << "%PS file generated using a postscript generator \n";
 	myfile << "%Created by Jesse Zhang, Max Hesser-Knoll, James Lang, Scott Corcoran \n";
 
