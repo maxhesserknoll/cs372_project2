@@ -164,7 +164,7 @@ TEST_CASE("Test Trapezoid") {
     REQUIRE(testTrap.toString(360, 360) ==
             "gsave\n"
             "360.000000 360.000000 translate\n"
-            "55.000000 44.000000 21.200000\n"
+            "21.200000 44.000000 55.000000\n"
             "/topside 1 index def\n"
             "/bottomside 2 index def\n"
             "/hieght 3 index def\n"
@@ -196,6 +196,7 @@ TEST_CASE("Test FiftyShades") {
     REQUIRE(testFS.toString(360, 360) ==
             "gsave\n"
             "360.000000 360.000000 translate\n"
+            "gsave\n"
             "88.900000\n"
             "/size 1 index def\n"
             "/50size size 50 div def\n"
@@ -224,6 +225,7 @@ TEST_CASE("Test FiftyShades") {
             "size 0 lineto\n"
             "closepath\n"
             "stroke\n"
+            "grestore\n"
             "grestore\n");
 }
 
@@ -357,7 +359,7 @@ TEST_CASE("Test Horizontal") {
             "grestore\n"
             "gsave\n"
             "355.973000 0 translate\n"
-            "55.000000 44.000000 21.200000\n"
+            "21.200000 44.000000 55.000000\n"
             "/topside 1 index def\n"
             "/bottomside 2 index def\n"
             "/hieght 3 index def\n"
